@@ -445,7 +445,7 @@ def admin_view_all_programmes(request):
     phd = Programme.objects.filter(category='PHD').prefetch_related('discipline_set').values(
         'id', 'name', 'category', 'programme_begin_year', 'discipline__name'
     )
-
+    print(ug)
     # Prepare the JSON response data
     response_data = {
         'ug_programmes': list(ug),
@@ -2251,11 +2251,12 @@ def admin_view_all_course_instructor(request):
         'course_id', 'instructor_id__id__user'  # Traversing Faculty → ExtraInfo → User
     ).annotate(
         course_name=F('course_id__name'),
+        course_code = F('course_id__code'),
         course_version=F('course_id__version'),
         faculty_first_name=F('instructor_id__id__user__first_name'),
         faculty_last_name=F('instructor_id__id__user__last_name')
     ).values(
-        'course_id', 'course_name', 'course_version', 
+        'course_id', 'course_name', 'course_code', 'course_version', 
         'instructor_id', 'faculty_first_name', 'faculty_last_name', 
         'year', 'semester_no'
     )
